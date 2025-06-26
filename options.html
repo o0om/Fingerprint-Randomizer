@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SECURITY CONTROL</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-root">
+    <div class="templeos-titlebar">SECURITY CONTROL</div>
+    
+    <div class="main-content">
+      <div class="status-panel">
+        <div class="status-title">SYSTEM STATUS</div>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">PROTECTION:</span>
+            <span class="status-value" id="protectionLevel">MAXIMUM</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">SHIELDS:</span>
+            <span class="status-value" id="activeShields">6/6</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">ROTATION:</span>
+            <span class="status-value" id="nextRotation">28 MIN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">[X]</div>
+            <div class="section-title">CORE PROTECTION</div>
+          </div>
+          <div class="section-description">PRIMARY ANTI-FINGERPRINTING MODULES</div>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="toggle-fingerprint" checked>
+              <span class="slider"></span>
+              <span class="label">FINGERPRINT RANDOMIZATION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-webgl" checked>
+              <span class="slider"></span>
+              <span class="label">WEBGL PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-audio" checked>
+              <span class="slider"></span>
+              <span class="label">AUDIO CONTEXT PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-webrtc" checked>
+              <span class="slider"></span>
+              <span class="label">WEBRTC PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-canvas" checked>
+              <span class="slider"></span>
+              <span class="label">CANVAS PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-microphone" checked>
+              <span class="slider"></span>
+              <span class="label">MICROPHONE PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">[X]</div>
+            <div class="section-title">ADVANCED PROTECTION</div>
+          </div>
+          <div class="section-description">ADDITIONAL SECURITY LAYERS</div>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="toggle-stun">
+              <span class="slider"></span>
+              <span class="label">STUN SERVER PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-turn">
+              <span class="slider"></span>
+              <span class="label">TURN SERVER ROUTING</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-ml">
+              <span class="slider"></span>
+              <span class="label">MACHINE LEARNING EVASION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-fonts">
+              <span class="slider"></span>
+              <span class="label">FONT FINGERPRINT PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-behavioral">
+              <span class="slider"></span>
+              <span class="label">BEHAVIORAL FINGERPRINT PROTECTION</span>
+              <span class="toggle-icon">[X]</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">[X]</div>
+            <div class="section-title">SECURITY PROFILES</div>
+          </div>
+          <div class="section-description">PREDEFINED PROTECTION CONFIGURATIONS</div>
+          <div class="button-group">
+            <button class="btn" data-profile="maximum">MAXIMUM</button>
+            <button class="btn" data-profile="stealth">STEALTH</button>
+            <button class="btn" data-profile="custom">CUSTOM</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">[X]</div>
+            <div class="section-title">SYSTEM CONTROLS</div>
+          </div>
+          <div class="section-description">MANUAL SECURITY OPERATIONS</div>
+          <div class="button-group">
+            <button class="btn" id="rotateNow">ROTATE FINGERPRINT</button>
+            <button class="btn" id="testSecurity">SECURITY TEST</button>
+            <button class="btn danger" id="resetAll">RESET SETTINGS</button>
+            <button class="btn" id="saveSettings">SAVE CONFIGURATION</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="templeos-system-log" id="systemLog">
+> SYSTEM READY
+> ENCRYPTION ACTIVE
+> FINGERPRINT ROTATED
+> WEBGL PROTECTED
+> AUDIO CONTEXT SECURED
+> WEBRTC BLOCKED
+> CONFIGURATION SYNCED
+      </div>
+    </div>
+
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <span id="errorMessage"></span>
+      <button id="closeError" class="error-close">X</button>
+    </div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html> 

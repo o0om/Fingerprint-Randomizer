@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Free Your Self",
+  "version": "1.0.0",
+  "description": "Advanced browser fingerprinting protection and privacy hardening",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "management"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "content_scripts/test_handler.js",
+        "content_scripts/fingerprint_randomizer.js",
+        "content_scripts/webgl_spoofer.js",
+        "content_scripts/audio_context_spoofer.js",
+        "content_scripts/webrtc_obfuscator.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "wasm/fingerprint_spoofer.wasm",
+        "wasm/fingerprint_spoofer.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Free Your Self - Privacy Protection"
+  },
+  "options_page": "options.html"
+} 

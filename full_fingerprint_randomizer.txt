@@ -1,0 +1,788 @@
+(function() {
+'use strict';
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomFloat(min, max, decimals = 2) {
+  return +(Math.random() * (max - min) + min).toFixed(decimals);
+}
+function randomFrom(arr) {
+  return arr[randomInt(0, arr.length - 1)];
+}
+function randomString(len) {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let s = '';
+  for (let i = 0; i < len; i++) s += chars.charAt(randomInt(0, chars.length - 1));
+  return s;
+}
+function randomBool() {
+  return Math.random() > 0.5;
+}
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+const sessionSeed = randomString(16) + Date.now();
+function seededRandom(seed) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+  }
+  return function() {
+    h += h << 13; h ^= h >>> 7;
+    h += h << 3; h ^= h >>> 17;
+    h += h << 5;
+    return (h >>> 0) / 4294967295;
+  };
+}
+const seededRand = seededRandom(sessionSeed);
+function seededRandomInt(min, max) {
+  return Math.floor(seededRand() * (max - min + 1)) + min;
+}
+function seededRandomFrom(arr) {
+  return arr[seededRandomInt(0, arr.length - 1)];
+}
+
+const spoofDB = {
+  userAgent: [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
+  ],
+  platform: ["Win32", "MacIntel", "Linux x86_64", "Linux armv7l"],
+  language: ["en-US", "en-GB", "de-DE", "fr-FR", "es-ES", "ru-RU", "zh-CN"],
+  languages: [
+    ["en-US", "en"],
+    ["en-GB", "en"],
+    ["de-DE", "de", "en"],
+    ["fr-FR", "fr", "en"],
+    ["es-ES", "es", "en"]
+  ],
+  hardwareConcurrency: [2, 4, 6, 8, 12, 16],
+  deviceMemory: [2, 4, 8, 16],
+  vendor: ["Google Inc.", "Apple Computer, Inc.", "Mozilla Foundation"],
+  maxTouchPoints: [0, 1, 2, 5, 10],
+  doNotTrack: ["1", "0", null],
+  cookieEnabled: [true, false],
+  webdriver: [false],
+  appVersion: [
+    "5.0 (Windows)", "5.0 (Macintosh)", "5.0 (X11; Linux x86_64)", "5.0 (Windows NT 10.0; Win64; x64)"
+  ],
+  appName: ["Netscape", "Mozilla", "Chrome"],
+  appCodeName: ["Mozilla"],
+  product: ["Gecko", "WebKit", "Blink"],
+  productSub: ["20030107", "20100101"],
+  oscpu: ["Windows NT 10.0; Win64; x64", "Macintosh; Intel Mac OS X 10_15_7", "Linux x86_64"],
+  buildID: [randomString(10), randomString(12)],
+  screenResolutions: [
+    { width: 1920, height: 1080, colorDepth: 24, pixelDepth: 24 },
+    { width: 1366, height: 768, colorDepth: 24, pixelDepth: 24 },
+    { width: 1440, height: 900, colorDepth: 24, pixelDepth: 24 },
+    { width: 2560, height: 1440, colorDepth: 32, pixelDepth: 32 },
+    { width: 3840, height: 2160, colorDepth: 32, pixelDepth: 32 }
+  ],
+  webglVendors: ["Intel Inc.", "NVIDIA Corporation", "AMD", "Apple Inc.", "Mesa/X.org", "VMware, Inc."],
+  webglRenderers: [
+    "Intel(R) HD Graphics 620", "NVIDIA GeForce GTX 1060", "AMD Radeon RX 580",
+    "Apple M1", "Mesa DRI Intel(R) HD Graphics", "VMware SVGA 3D"
+  ],
+  audioSampleRates: [22050, 44100, 48000, 96000],
+  audioChannelCounts: [1, 2, 6, 8],
+  fontFamilies: [
+    "Arial", "Helvetica", "Times New Roman", "Courier New", "Georgia", "Verdana",
+    "Tahoma", "Trebuchet MS", "Comic Sans MS", "Impact", "Lucida Console"
+  ],
+  batteryLevels: [0.1, 0.25, 0.5, 0.75, 0.9, 1.0],
+  batteryChargingTimes: [0, 1800, 3600, 7200],
+  batteryDischargingTimes: [1800, 3600, 7200, 14400],
+  connectionTypes: ["wifi", "4g", "3g", "2g", "slow-2g"],
+  connectionEffectiveTypes: ["4g", "3g", "2g", "slow-2g"],
+  timezoneOffsets: [-480, -420, -360, -300, -240, -180, -120, -60, 0, 60, 120, 180, 240, 300, 360, 420, 480],
+  timezoneNames: [
+    "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Berlin",
+    "Asia/Tokyo", "Australia/Sydney", "America/Chicago", "America/Denver"
+  ],
+  cpuCores: [2, 4, 6, 8, 12, 16, 24, 32],
+  memorySizes: [2, 4, 8, 16, 32, 64, 128, 256, 512],
+  plugins: [
+    { name: "PDF Viewer", filename: "internal-pdf-viewer", description: "Portable Document Format" },
+    { name: "Chrome PDF Plugin", filename: "internal-pdf-viewer", description: "Portable Document Format" },
+    { name: "Native Client", filename: "internal-nacl-plugin", description: "Native Client Executable" }
+  ],
+  mimeTypes: [
+    { type: "application/pdf", suffixes: "pdf", description: "Portable Document Format" },
+    { type: "application/x-google-chrome-pdf", suffixes: "pdf", description: "Portable Document Format" }
+  ]
+};
+
+function spoofNavigatorProperties() {
+  const navProps = {
+    userAgent: () => seededRandomFrom(spoofDB.userAgent),
+    platform: () => seededRandomFrom(spoofDB.platform),
+    language: () => seededRandomFrom(spoofDB.language),
+    languages: () => seededRandomFrom(spoofDB.languages),
+    hardwareConcurrency: () => seededRandomFrom(spoofDB.hardwareConcurrency),
+    deviceMemory: () => seededRandomFrom(spoofDB.deviceMemory),
+    vendor: () => seededRandomFrom(spoofDB.vendor),
+    maxTouchPoints: () => seededRandomFrom(spoofDB.maxTouchPoints),
+    doNotTrack: () => seededRandomFrom(spoofDB.doNotTrack),
+    cookieEnabled: () => seededRandomFrom(spoofDB.cookieEnabled),
+    webdriver: () => seededRandomFrom(spoofDB.webdriver),
+    appVersion: () => seededRandomFrom(spoofDB.appVersion),
+    appName: () => seededRandomFrom(spoofDB.appName),
+    appCodeName: () => seededRandomFrom(spoofDB.appCodeName),
+    product: () => seededRandomFrom(spoofDB.product),
+    productSub: () => seededRandomFrom(spoofDB.productSub),
+    oscpu: () => seededRandomFrom(spoofDB.oscpu),
+    buildID: () => seededRandomFrom(spoofDB.buildID)
+  };
+
+  for (const prop in navProps) {
+    try {
+      Object.defineProperty(navigator, prop, {
+        get: navProps[prop],
+        configurable: true
+      });
+    } catch (e) {
+      console.warn(`Failed to spoof navigator.${prop}:`, e);
+    }
+  }
+
+  if ('userAgentData' in navigator) {
+    Object.defineProperty(navigator, 'userAgentData', {
+      get: () => ({
+        brands: [
+          {brand: "Chromium", version: "120"},
+          {brand: "Not_A Brand", version: "99"},
+          {brand: "Google Chrome", version: "120"}
+        ],
+        mobile: false,
+        platform: seededRandomFrom(spoofDB.platform)
+      }),
+      configurable: true
+    });
+  }
+}
+
+function spoofScreenProperties() {
+  const screenRes = seededRandomFrom(spoofDB.screenResolutions);
+  
+  const screenProps = {
+    width: () => screenRes.width,
+    height: () => screenRes.height,
+    availWidth: () => screenRes.width,
+    availHeight: () => screenRes.height - 40,
+    colorDepth: () => screenRes.colorDepth,
+    pixelDepth: () => screenRes.pixelDepth
+  };
+
+  for (const prop in screenProps) {
+    try {
+      Object.defineProperty(screen, prop, {
+        get: screenProps[prop],
+        configurable: true
+      });
+    } catch (e) {
+      console.warn(`Failed to spoof screen.${prop}:`, e);
+    }
+  }
+
+  if ('orientation' in screen) {
+    Object.defineProperty(screen, 'orientation', {
+      get: () => ({
+        angle: seededRandomFrom([0, 90, 180, 270]),
+        type: seededRandomFrom(['landscape-primary', 'portrait-primary'])
+      }),
+      configurable: true
+    });
+  }
+}
+
+function spoofWebGL() {
+  const origGetParameter = WebGLRenderingContext.prototype.getParameter;
+  const origGetExtension = WebGLRenderingContext.prototype.getExtension;
+  const origGetSupportedExtensions = WebGLRenderingContext.prototype.getSupportedExtensions;
+
+  WebGLRenderingContext.prototype.getParameter = function(param) {
+    if (param === this.VENDOR) {
+      return seededRandomFrom(spoofDB.webglVendors);
+    }
+    if (param === this.RENDERER) {
+      return seededRandomFrom(spoofDB.webglRenderers);
+    }
+    if (param === this.VERSION) {
+      return "WebGL 1.0";
+    }
+    if (param === this.SHADING_LANGUAGE_VERSION) {
+      return "WebGL GLSL ES 1.0";
+    }
+    
+    return origGetParameter.call(this, param);
+  };
+
+  WebGLRenderingContext.prototype.getExtension = function(name) {
+    const blockedExtensions = [
+      'WEBGL_debug_renderer_info',
+      'WEBGL_debug_shaders',
+      'WEBGL_compressed_texture_s3tc',
+      'WEBGL_compressed_texture_etc',
+      'WEBGL_compressed_texture_pvrtc'
+    ];
+    
+    if (blockedExtensions.includes(name)) {
+      return null;
+    }
+    
+    return origGetExtension.call(this, name);
+  };
+
+  WebGLRenderingContext.prototype.getSupportedExtensions = function() {
+    const extensions = origGetSupportedExtensions.call(this);
+    return extensions.filter(ext => !ext.includes('debug') && !ext.includes('compressed_texture'));
+  };
+}
+
+function spoofCanvas() {
+  const origToDataURL = HTMLCanvasElement.prototype.toDataURL;
+  const origGetImageData = CanvasRenderingContext2D.prototype.getImageData;
+  const origToBlob = HTMLCanvasElement.prototype.toBlob;
+
+  HTMLCanvasElement.prototype.toDataURL = function(...args) {
+    const ctx = this.getContext('2d');
+    if (ctx) {
+      ctx.globalAlpha = 0.99 + Math.random() * 0.01;
+      ctx.fillStyle = `rgb(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)})`;
+      ctx.fillRect(0, 0, 1, 1);
+    }
+    return origToDataURL.apply(this, args);
+  };
+
+  CanvasRenderingContext2D.prototype.getImageData = function(...args) {
+    const imageData = origGetImageData.apply(this, args);
+    const data = imageData.data;
+    
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] += (Math.random() - 0.5) * 0.1;
+      data[i + 1] += (Math.random() - 0.5) * 0.1;
+      data[i + 2] += (Math.random() - 0.5) * 0.1;
+    }
+    
+    return imageData;
+  };
+
+  HTMLCanvasElement.prototype.toBlob = function(...args) {
+    const ctx = this.getContext('2d');
+    if (ctx) {
+      ctx.globalAlpha = 0.99 + Math.random() * 0.01;
+      ctx.fillStyle = `rgb(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)})`;
+      ctx.fillRect(0, 0, 1, 1);
+    }
+    return origToBlob.apply(this, args);
+  };
+}
+
+function spoofAudio() {
+  const origGetChannelData = AudioBuffer.prototype.getChannelData;
+  const origCreateMediaElementSource = AudioContext.prototype.createMediaElementSource;
+  const origCreateAnalyser = AudioContext.prototype.createAnalyser;
+
+  AudioBuffer.prototype.getChannelData = function(channel) {
+    const data = origGetChannelData.call(this, channel);
+    
+    for (let i = 0; i < data.length; i++) {
+      data[i] += (Math.random() - 0.5) * 0.00001;
+    }
+    
+    return data;
+  };
+
+  Object.defineProperty(AudioContext.prototype, 'sampleRate', {
+    get: () => seededRandomFrom(spoofDB.audioSampleRates),
+    configurable: true
+  });
+
+  AudioContext.prototype.createAnalyser = function() {
+    const analyser = origCreateAnalyser.call(this);
+    
+    Object.defineProperty(analyser, 'frequencyBinCount', {
+      get: () => seededRandomFrom([256, 512, 1024, 2048]),
+      configurable: true
+    });
+    
+    return analyser;
+  };
+}
+
+function spoofFonts() {
+  const origMeasureText = CanvasRenderingContext2D.prototype.measureText;
+  
+  CanvasRenderingContext2D.prototype.measureText = function(text) {
+    const result = origMeasureText.call(this, text);
+    
+    result.width += (Math.random() - 0.5) * 0.1;
+    result.actualBoundingBoxLeft += (Math.random() - 0.5) * 0.1;
+    result.actualBoundingBoxRight += (Math.random() - 0.5) * 0.1;
+    result.actualBoundingBoxAscent += (Math.random() - 0.5) * 0.1;
+    result.actualBoundingBoxDescent += (Math.random() - 0.5) * 0.1;
+    
+    return result;
+  };
+
+  const style = document.createElement('style');
+  style.textContent = `
+    @font-face {
+      font-family: 'FakeFont${randomString(5)}';
+      src: local('Arial');
+    }
+    @font-face {
+      font-family: 'FakeFont${randomString(5)}';
+      src: local('Helvetica');
+    }
+    body { 
+      font-family: 'FakeFont${randomString(5)}', Arial, sans-serif !important; 
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function spoofBattery() {
+  if ('getBattery' in navigator) {
+    navigator.getBattery = function() {
+      return Promise.resolve({
+        charging: seededRandomFrom([true, false]),
+        chargingTime: seededRandomFrom(spoofDB.batteryChargingTimes),
+        dischargingTime: seededRandomFrom(spoofDB.batteryDischargingTimes),
+        level: seededRandomFrom(spoofDB.batteryLevels)
+      });
+    };
+  }
+}
+
+function spoofConnection() {
+  if ('connection' in navigator) {
+    const connectionProps = {
+      effectiveType: () => seededRandomFrom(spoofDB.connectionEffectiveTypes),
+      type: () => seededRandomFrom(spoofDB.connectionTypes),
+      downlink: () => seededRandomFrom([1, 2, 4, 8, 16, 32]),
+      rtt: () => seededRandomFrom([50, 100, 200, 300]),
+      saveData: () => seededRandomFrom([true, false])
+    };
+
+    for (const prop in connectionProps) {
+      try {
+        Object.defineProperty(navigator.connection, prop, {
+          get: connectionProps[prop],
+          configurable: true
+        });
+      } catch (e) {
+        console.warn(`Failed to spoof connection.${prop}:`, e);
+      }
+    }
+  }
+}
+
+function spoofPermissions() {
+  if ('permissions' in navigator) {
+    const originalQuery = navigator.permissions.query;
+    
+    navigator.permissions.query = function(permissionDescriptor) {
+      const permissions = {
+        'geolocation': 'denied',
+        'notifications': 'denied',
+        'camera': 'denied',
+        'microphone': 'denied',
+        'persistent-storage': 'denied',
+        'background-sync': 'denied',
+        'midi': 'denied',
+        'payment-handler': 'denied',
+        'push': 'denied',
+        'wake-lock': 'denied'
+      };
+      
+      return Promise.resolve({
+        state: permissions[permissionDescriptor.name] || 'denied'
+      });
+    };
+  }
+}
+
+function spoofMediaDevices() {
+  if ('mediaDevices' in navigator) {
+    const originalEnumerateDevices = navigator.mediaDevices.enumerateDevices;
+    const originalGetUserMedia = navigator.mediaDevices.getUserMedia;
+    
+    navigator.mediaDevices.enumerateDevices = function() {
+      return Promise.resolve([]);
+    };
+    
+    navigator.mediaDevices.getUserMedia = function(constraints) {
+      return Promise.reject(new DOMException('Permission denied', 'NotAllowedError'));
+    };
+  }
+}
+
+function spoofGeolocation() {
+  if ('geolocation' in navigator) {
+    const originalGetCurrentPosition = navigator.geolocation.getCurrentPosition;
+    const originalWatchPosition = navigator.geolocation.watchPosition;
+    
+    navigator.geolocation.getCurrentPosition = function(success, error) {
+      if (error) {
+        error({ code: 1, message: 'User denied geolocation' });
+      }
+    };
+    
+    navigator.geolocation.watchPosition = function(success, error) {
+      if (error) {
+        error({ code: 1, message: 'User denied geolocation' });
+      }
+      return -1;
+    };
+  }
+}
+
+function spoofDeviceOrientation() {
+  if ('DeviceOrientationEvent' in window) {
+    DeviceOrientationEvent.requestPermission = function() {
+      return Promise.resolve('denied');
+    };
+  }
+  
+  if ('DeviceMotionEvent' in window) {
+    DeviceMotionEvent.requestPermission = function() {
+      return Promise.resolve('denied');
+    };
+  }
+}
+
+function spoofTiming() {
+  const origNow = performance.now;
+  const origDateNow = Date.now;
+  const origGetTime = Date.prototype.getTime;
+  
+  performance.now = function() {
+    return origNow.call(performance) + (Math.random() - 0.5) * 0.1;
+  };
+  
+  Date.now = function() {
+    return origDateNow.call(Date) + randomInt(-2, 2);
+  };
+  
+  Date.prototype.getTime = function() {
+    return origGetTime.call(this) + randomInt(-2, 2);
+  };
+  
+  const origTime = console.time;
+  const origTimeEnd = console.timeEnd;
+  
+  console.time = function(label) {
+  };
+  
+  console.timeEnd = function(label) {
+  };
+}
+
+function spoofPluginsMimeTypes() {
+  Object.defineProperty(navigator, 'plugins', {
+    get: () => {
+      const pluginArray = [];
+      spoofDB.plugins.forEach((plugin, index) => {
+        pluginArray[index] = {
+          name: plugin.name,
+          filename: plugin.filename,
+          description: plugin.description,
+          length: 1
+        };
+      });
+      pluginArray.length = spoofDB.plugins.length;
+      return pluginArray;
+    },
+    configurable: true
+  });
+  
+  Object.defineProperty(navigator, 'mimeTypes', {
+    get: () => {
+      const mimeTypeArray = [];
+      spoofDB.mimeTypes.forEach((mimeType, index) => {
+        mimeTypeArray[index] = {
+          type: mimeType.type,
+          suffixes: mimeType.suffixes,
+          description: mimeType.description
+        };
+      });
+      mimeTypeArray.length = spoofDB.mimeTypes.length;
+      return mimeTypeArray;
+    },
+    configurable: true
+  });
+}
+
+function spoofIntl() {
+  const origDateTimeFormat = Intl.DateTimeFormat;
+  
+  Intl.DateTimeFormat = function(locale, options) {
+    const instance = new origDateTimeFormat(locale, options);
+    
+    const origResolvedOptions = instance.resolvedOptions;
+    instance.resolvedOptions = function() {
+      const options = origResolvedOptions.call(this);
+      options.timeZone = seededRandomFrom(spoofDB.timezoneNames);
+      return options;
+    };
+    
+    return instance;
+  };
+  
+  Object.defineProperty(Date.prototype, 'getTimezoneOffset', {
+    value: function() {
+      return seededRandomFrom(spoofDB.timezoneOffsets);
+    },
+    configurable: true
+  });
+}
+
+function spoofStorage() {
+  const origGetItem = Storage.prototype.getItem;
+  const origSetItem = Storage.prototype.setItem;
+  const origRemoveItem = Storage.prototype.removeItem;
+  const origClear = Storage.prototype.clear;
+  
+  Storage.prototype.getItem = function(key) {
+    const blockedKeys = ['fingerprint', 'device_id', 'tracking_id', 'session_id'];
+    if (blockedKeys.some(k => key.toLowerCase().includes(k))) {
+      return null;
+    }
+    return origGetItem.call(this, key);
+  };
+  
+  Storage.prototype.setItem = function(key, value) {
+    const blockedKeys = ['fingerprint', 'device_id', 'tracking_id', 'session_id'];
+    if (blockedKeys.some(k => key.toLowerCase().includes(k))) {
+      return;
+    }
+    return origSetItem.call(this, key, value);
+  };
+}
+
+function spoofWebRTC() {
+  if (typeof RTCPeerConnection !== 'undefined') {
+    const origPeerConnection = window.RTCPeerConnection;
+    
+    window.RTCPeerConnection = function(config) {
+      config.iceServers = [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ];
+      
+      const pc = new origPeerConnection(config);
+      
+      const origCreateOffer = pc.createOffer;
+      pc.createOffer = function(...args) {
+        return origCreateOffer.apply(this, args).then(offer => {
+          offer.sdp = offer.sdp.replace(/a=ice-ufrag:.*/g, 'a=ice-ufrag:' + randomString(8));
+          offer.sdp = offer.sdp.replace(/a=ice-pwd:.*/g, 'a=ice-pwd:' + randomString(22));
+          return offer;
+        });
+      };
+      
+      const origCreateAnswer = pc.createAnswer;
+      pc.createAnswer = function(...args) {
+        return origCreateAnswer.apply(this, args).then(answer => {
+          answer.sdp = answer.sdp.replace(/a=ice-ufrag:.*/g, 'a=ice-ufrag:' + randomString(8));
+          answer.sdp = answer.sdp.replace(/a=ice-pwd:.*/g, 'a=ice-pwd:' + randomString(22));
+          return answer;
+        });
+      };
+      
+      return pc;
+    };
+  }
+}
+
+function setupAntiDetection() {
+  const origToString = Function.prototype.toString;
+  Function.prototype.toString = function() {
+    const str = origToString.call(this);
+    if (str.includes('spoof') || str.includes('random')) {
+      return 'function() { [native code] }';
+    }
+    return str;
+  };
+  
+  const origArrayToString = Array.prototype.toString;
+  Array.prototype.toString = function() {
+    const str = origArrayToString.call(this);
+    if (str.includes('spoofDB')) {
+      return '[object Array]';
+    }
+    return str;
+  };
+  
+  const origLog = console.log;
+  const origWarn = console.warn;
+  const origError = console.error;
+  
+  console.log = function(...args) {
+    if (args[0] && typeof args[0] === 'string' && args[0].includes('Free Your Self')) {
+      return;
+    }
+    return origLog.apply(console, args);
+  };
+  
+  console.warn = function(...args) {
+    if (args[0] && typeof args[0] === 'string' && args[0].includes('Failed to spoof')) {
+      return;
+    }
+    return origWarn.apply(console, args);
+  };
+}
+
+function setupMutationObserver() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.tagName === 'CANVAS') {
+            spoofCanvasElement(node);
+          }
+          if (node.tagName === 'VIDEO' || node.tagName === 'AUDIO') {
+            spoofMediaElement(node);
+          }
+          const canvases = node.querySelectorAll('canvas');
+          canvases.forEach(canvas => spoofCanvasElement(canvas));
+        }
+      });
+    });
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+
+function spoofCanvasElement(canvas) {
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (gl) {
+    spoofWebGL();
+  }
+  
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+  }
+}
+
+function spoofMediaElement(element) {
+  Object.defineProperty(element, 'srcObject', {
+    get: () => null,
+    set: () => {},
+    configurable: true
+  });
+  
+  Object.defineProperty(element, 'currentSrc', {
+    get: () => '',
+    configurable: true
+  });
+}
+
+let rotationInterval = null;
+
+function startFingerprintRotation() {
+  rotationInterval = setInterval(() => {
+    rotateFingerprint();
+  }, 30 * 60 * 1000);
+}
+
+function rotateFingerprint() {
+  const newSessionSeed = randomString(16) + Date.now();
+  
+  spoofNavigatorProperties();
+  spoofScreenProperties();
+  spoofWebGL();
+  spoofCanvas();
+  spoofAudio();
+  spoofFonts();
+  spoofBattery();
+  spoofConnection();
+  spoofPermissions();
+  spoofMediaDevices();
+  spoofGeolocation();
+  spoofDeviceOrientation();
+  spoofTiming();
+  spoofPluginsMimeTypes();
+  spoofIntl();
+  spoofStorage();
+  spoofWebRTC();
+  
+  console.log('Free Your Self: Fingerprint rotated successfully');
+}
+
+function stopFingerprintRotation() {
+  if (rotationInterval) {
+    clearInterval(rotationInterval);
+    rotationInterval = null;
+  }
+}
+
+function initializeFingerprintRandomizer() {
+  try {
+    spoofNavigatorProperties();
+    spoofScreenProperties();
+    spoofWebGL();
+    spoofCanvas();
+    spoofAudio();
+    spoofFonts();
+    spoofBattery();
+    spoofConnection();
+    spoofPermissions();
+    spoofMediaDevices();
+    spoofGeolocation();
+    spoofDeviceOrientation();
+    spoofTiming();
+    spoofPluginsMimeTypes();
+    spoofIntl();
+    spoofStorage();
+    spoofWebRTC();
+    
+    setupAntiDetection();
+    
+    if (document.body) {
+      setupMutationObserver();
+    } else {
+      document.addEventListener('DOMContentLoaded', setupMutationObserver);
+    }
+    
+    startFingerprintRotation();
+    
+    console.log('Free Your Self: Advanced fingerprint randomizer initialized successfully');
+    
+    window.freeYourSelf = {
+      rotateFingerprint,
+      startFingerprintRotation,
+      stopFingerprintRotation
+    };
+    
+  } catch (error) {
+    console.error('Free Your Self: Error initializing fingerprint randomizer:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeFingerprintRandomizer);
+} else {
+  initializeFingerprintRandomizer();
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    initializeFingerprintRandomizer,
+    rotateFingerprint,
+    startFingerprintRotation,
+    stopFingerprintRotation
+  };
+}
+
+})(); 

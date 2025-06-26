@@ -1,0 +1,377 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'PxPlus IBM VGA8', 'Cozette', 'Courier New', 'Consolas', 'Monaco', monospace;
+  background: #0000AA;
+  color: #FFFFFF;
+  width: 360px;
+  height: 520px;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.popup-root {
+  width: 360px;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+  background: #0000AA;
+  border: 4px solid #FFFFFF;
+  outline: 4px solid #AAAAAA;
+  outline-offset: -8px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.templeos-titlebar {
+  background: #0000AA;
+  color: #FFFF00;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 0;
+  text-align: center;
+  border-bottom: 4px solid #FFFFFF;
+  letter-spacing: 2px;
+  border-top: 4px solid #FFFF00;
+  flex-shrink: 0;
+}
+
+.lock-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0000AA;
+}
+
+.lock-card {
+  background: #0000AA;
+  border: 4px solid #FFFFFF;
+  padding: 24px;
+  text-align: center;
+  color: #FFFF00;
+}
+
+.lock-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.lock-input {
+  background: #000000;
+  color: #FFFFFF;
+  border: 2px solid #AAAAAA;
+  font-family: 'Cozette', 'PxPlus IBM VGA8', monospace;
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 100%;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.lock-input:focus {
+  outline: 2px solid #FFFF00;
+  outline-offset: 2px;
+}
+
+.lock-btn {
+  background: #FFFFFF;
+  color: #0000AA;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Cozette', 'PxPlus IBM VGA8', monospace;
+  border: 2px solid #AAAAAA;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.lock-btn:focus {
+  outline: 2px solid #FFFF00;
+  outline-offset: 2px;
+}
+
+.lock-error {
+  color: #FF0000;
+  font-size: 12px;
+  margin-top: 8px;
+  min-height: 16px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+.card {
+  background: #0000AA;
+  border: 4px solid #FFFFFF;
+  padding: 6px;
+  margin-bottom: 2px;
+  color: #FFFF00;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: #FFFF00;
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+}
+
+.status-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px 0;
+}
+
+.status-label {
+  color: #AAAAAA;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.status-value {
+  color: #00FF00;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.profile-btn {
+  background: #0000AA;
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: bold;
+  font-family: 'PxPlus IBM VGA8', 'Cozette', monospace;
+  border: 2px solid #AAAAAA;
+  padding: 3px 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  height: 22px;
+  min-width: 60px;
+  box-shadow: none;
+  outline: none;
+  position: relative;
+}
+
+.profile-btn.active {
+  background: #00FF00;
+  color: #0000AA;
+  border: 2px double #FFFF00;
+  outline: 2px solid #FFFFFF;
+  outline-offset: -4px;
+  z-index: 1;
+}
+
+.profile-btn:focus {
+  outline: 2px solid #FFFF00;
+  outline-offset: 2px;
+}
+
+.toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.toggle-row {
+  display: flex;
+  align-items: center;
+  background: #0000AA;
+  border: 2px solid #AAAAAA;
+  padding: 4px 6px;
+  margin-bottom: 0;
+  cursor: pointer;
+  position: relative;
+}
+.toggle-row input {
+  display: none;
+}
+.toggle-switch {
+  width: 18px;
+  height: 10px;
+  background: #FFFFFF;
+  border: 2px solid #AAAAAA;
+  position: relative;
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.toggle-row input:checked + .toggle-switch {
+  background: #00FF00;
+  border-color: #00FF00;
+}
+.toggle-switch::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: #0000AA;
+  border: 2px solid #AAAAAA;
+  margin: 1px;
+  transition: margin-left 0.1s;
+}
+.toggle-row input:checked + .toggle-switch::before {
+  background: #FFFF00;
+  border-color: #FFFF00;
+  margin-left: 6px;
+}
+.toggle-label {
+  font-size: 9px;
+  font-weight: bold;
+  color: #FFFFFF;
+  flex: 1;
+  margin-left: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toggle-icon {
+  width: 10px;
+  height: 10px;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  color: #00FF00;
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.actions-card {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: flex-end;
+  background: #0000AA;
+  border: 2px solid #AAAAAA;
+  padding: 6px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.main-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #FFFFFF;
+  color: #0000AA;
+  font-size: 9px;
+  font-weight: bold;
+  font-family: 'PxPlus IBM VGA8', 'Cozette', monospace;
+  border: 2px solid #AAAAAA;
+  padding: 3px 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+  box-shadow: none;
+  border-radius: 0;
+  height: 22px;
+  min-width: 70px;
+}
+.main-btn:focus {
+  outline: 2px solid #FFFF00;
+  outline-offset: 2px;
+}
+.main-btn.danger {
+  background: #FF0000;
+  color: #FFFFFF;
+  border-color: #FFFF00;
+}
+.main-btn.danger:focus {
+  outline: 2px solid #FFFFFF;
+}
+
+.templeos-system-log {
+  background: #000022;
+  color: #00FF00;
+  font-family: 'PxPlus IBM VGA8', 'Cozette', monospace;
+  font-size: 9px;
+  border-top: 4px double #AAAAAA;
+  padding: 4px 6px;
+  height: 40px;
+  overflow-y: auto;
+  white-space: pre;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.templeos-system-log .timestamp {
+  color: #AAAAAA;
+}
+
+.error-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #FF0000;
+  color: #FFFFFF;
+  padding: 4px 6px;
+  font-size: 9px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  border-bottom: 2px solid #FFFF00;
+}
+
+.error-close {
+  background: #FF0000;
+  color: #FFFFFF;
+  border: 1px solid #FFFF00;
+  padding: 1px 3px;
+  cursor: pointer;
+  font-size: 7px;
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background: #222299;
+}
+::-webkit-scrollbar-thumb {
+  background: #AAAAAA;
+  border: 1px solid #0000AA;
+}
+
+:focus {
+  outline: 2px solid #FFFF00 !important;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .popup-root { width: 100vw; min-width: 0; }
+  .main-content { padding: 4px; }
+  .card, .actions-card { padding: 4px; }
+  .templeos-titlebar { padding: 3px 4px; }
+} 

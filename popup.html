@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=360, initial-scale=1.0">
+  <title>SECURITY CONTROL</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-root">
+    <div class="templeos-titlebar">SECURITY CONTROL</div>
+    
+    <div class="main-content">
+      <div class="card">
+        <div class="section-title">SYSTEM STATUS</div>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">PROTECTION:</span>
+            <span class="status-value" id="protectionLevel">STRICT</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">SHIELDS:</span>
+            <span class="status-value" id="activeShields">6/6</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">ROTATION:</span>
+            <span class="status-value" id="nextRotation">29 MIN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">SECURITY PROFILES</div>
+        <div class="profile-buttons">
+          <button class="profile-btn active" data-profile="strict">STRICT</button>
+          <button class="profile-btn" data-profile="balanced">BALANCED</button>
+          <button class="profile-btn" data-profile="manual">MANUAL</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">PROTECTION MODULES</div>
+        <div class="toggle-list">
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-fingerprint" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">FINGERPRINT RANDOMISATION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-webgl" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">WEBGL PROTECTION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-audio" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">AUDIO CONTEXT PROTECTION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-webrtc" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">WEBRTC PROTECTION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-canvas" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">CANVAS PROTECTION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-microphone" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">MICROPHONE PROTECTION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-timezone">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">TIMEZONE SPOOFING</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-geolocation">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">GEOLOCATION SPOOFING</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-extensionmask">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">EXTENSION FINGERPRINT MASKING</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-isolatedstorage">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">ISOLATED STORAGE</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-useragent">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">USER-AGENT RANDOMIZATION</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="toggle-referrer">
+            <span class="toggle-switch"></span>
+            <span class="toggle-label">REFERRER POLICY ENFORCEMENT</span>
+            <span class="toggle-icon">[X]</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="actions-card">
+        <button class="main-btn" id="rotateNow">ROTATE FINGERPRINT</button>
+        <button class="main-btn" id="testSecurity">SECURITY TEST</button>
+        <button class="main-btn danger" id="resetAll">RESET SETTINGS</button>
+      </div>
+
+      <div class="templeos-system-log" id="systemLog">
+> SYSTEM READY
+> ENCRYPTION ACTIVE
+> FINGERPRINT ROTATED
+> WEBGL PROTECTED
+> AUDIO CONTEXT SECURED
+> WEBRTC BLOCKED
+      </div>
+    </div>
+
+    <div id="errorBanner" class="error-banner" style="display: none;">
+      <span id="errorMessage"></span>
+      <button id="closeError" class="error-close">X</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 
