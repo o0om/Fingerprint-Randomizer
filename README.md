@@ -2,7 +2,7 @@
 
 A powerful browser extension for advanced anti-forensic protection and browser fingerprint randomization. Built with WebAssembly for real-time spoofing and comprehensive OPSEC features.
 
-## 🛡️ Features
+##  Features
 
 ### Core Protection
 - **Advanced Fingerprint Randomization**: 1000+ line comprehensive fingerprint randomizer
@@ -30,7 +30,7 @@ A powerful browser extension for advanced anti-forensic protection and browser f
 - **Advanced Settings**: Comprehensive configuration options
 - **Import/Export**: Settings backup and restore functionality
 
-## 🚀 Installation
+##  Installation
 
 ### Chrome/Chromium
 1. Download the extension files
@@ -65,7 +65,7 @@ A powerful browser extension for advanced anti-forensic protection and browser f
 - Set custom TURN server: `turn:your-server.com:3478`
 - Configure username/password for authenticated TURN servers
 
-## 🔧 Technical Details
+##  Technical Details
 
 ### Architecture
 - **Manifest V3**: Modern extension architecture
@@ -92,7 +92,7 @@ A powerful browser extension for advanced anti-forensic protection and browser f
 - Mutation observer integration
 - Dynamic element protection
 
-## 🛠️ Development
+##  Development
 
 ### Building WebAssembly Module
 ```bash
@@ -134,7 +134,7 @@ free-your-self/
 └── icons/                     # Extension icons
 ```
 
-## 🔒 Security Features
+##  Security Features
 
 ### Privacy Protection
 - Automatic blocking of fingerprinting libraries
@@ -154,14 +154,14 @@ free-your-self/
 - Mutation observer integration
 - Dynamic protection updates
 
-## 📊 Performance
+##  Performance
 
 - **WebAssembly**: High-performance C++ fingerprint generation
 - **Efficient Rotation**: 30-minute default rotation interval
 - **Minimal Overhead**: Optimized for minimal performance impact
 - **Memory Efficient**: Compact implementation with minimal memory usage
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -169,15 +169,15 @@ free-your-self/
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## ⚠️ Disclaimer
+##  Disclaimer
 
 This extension is designed for privacy protection and legitimate security research. Users are responsible for complying with applicable laws and terms of service. The developers are not responsible for any misuse of this software.
 
-## 🆘 Support
+##  Support
 
 For issues, feature requests, or questions:
 - Create an issue on GitHub
