@@ -45,7 +45,7 @@ A powerful browser extension for advanced anti-forensic protection and browser f
 3. Click "This Firefox" tab
 4. Click "Load Temporary Add-on" and select the `manifest.json` file
 
-## 📋 Usage
+##  Usage
 
 ### Basic Operation
 1. Click the extension icon to open the popup
